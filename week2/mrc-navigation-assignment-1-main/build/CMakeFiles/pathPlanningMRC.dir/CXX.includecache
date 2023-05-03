@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/Planner/planning.h
+emc/io.h
+-
+iostream
+-
+stdio.h
+-
+cmath
+-
+list
+-
+algorithm
+-
+
+/home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main/src/Planner/planning.cpp
+./Planner/planning.h
+/home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main/src/Planner/Planner/planning.h
+algorithm
+-
+

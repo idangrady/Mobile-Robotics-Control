@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -march=native -ffast-math -fno-math-errno -g  -shared -Wl,-soname,libgmock_maind.so -o ../lib/libgmock_maind.so CMakeFiles/gmock_main.dir/src/gmock_main.cc.o  -Wl,-rpath,/home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main/build/gtest/lib ../lib/libgmockd.so ../lib/libgtestd.so -lpthread 
