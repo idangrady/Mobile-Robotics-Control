@@ -1,4 +1,4 @@
-# Install script for directory: /home/sarthak/mrc/sarthak_project
+# Install script for directory: /home/idangrady/Documents/Github/Mobile-Robotics-Control/week1
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/sarthak/mrc/sarthak_project/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/idangrady/Documents/Github/Mobile-Robotics-Control/week1/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

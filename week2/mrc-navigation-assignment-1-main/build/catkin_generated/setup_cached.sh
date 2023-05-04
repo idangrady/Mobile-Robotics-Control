@@ -7,6 +7,6 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main/build/devel:$CMAKE_PREFIX_PATH"
-export ROSLISP_PACKAGE_DIRECTORIES="/home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main/build/devel/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
-export ROS_PACKAGE_PATH="/home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main:$ROS_PACKAGE_PATH"
+export CMAKE_PREFIX_PATH="/home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main/build/devel:$CMAKE_PREFIX_PATH"
+export ROSLISP_PACKAGE_DIRECTORIES="/home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main/build/devel/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
+export ROS_PACKAGE_PATH="/home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main:$ROS_PACKAGE_PATH"

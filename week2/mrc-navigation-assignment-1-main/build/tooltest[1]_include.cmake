@@ -1,5 +1,5 @@
-if(EXISTS "/home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main/build/tooltest[1]_tests.cmake")
-  include("/home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main/build/tooltest[1]_tests.cmake")
+if(EXISTS "/home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main/build/tooltest[1]_tests.cmake")
+  include("/home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main/build/tooltest[1]_tests.cmake")
 else()
   add_test(tooltest_NOT_BUILT tooltest_NOT_BUILT)
 endif()

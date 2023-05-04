@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main/tests/tooltest.cpp" "/home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main/build/CMakeFiles/tooltest.dir/tests/tooltest.cpp.o"
+  "/home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main/tests/tooltest.cpp" "/home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main/build/CMakeFiles/tooltest.dir/tests/tooltest.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -26,7 +26,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main/build/CMakeFiles/pathPlanningMRC.dir/DependInfo.cmake"
+  "/home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main/build/CMakeFiles/pathPlanningMRC.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

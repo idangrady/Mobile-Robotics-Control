@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main
+CMAKE_SOURCE_DIR = /home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main/build
+CMAKE_BINARY_DIR = /home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main/build
 
 # Utility rule file for run_tests.
 
@@ -67,6 +67,6 @@ CMakeFiles/run_tests.dir/clean:
 .PHONY : CMakeFiles/run_tests.dir/clean
 
 CMakeFiles/run_tests.dir/depend:
-	cd /home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main /home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main /home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main/build /home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main/build /home/idangrady/Documents/Github/MRC/Project2/mrc-navigation-assignment-1-main/build/CMakeFiles/run_tests.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main /home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main /home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main/build /home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main/build /home/idangrady/Documents/Github/Mobile-Robotics-Control/week2/mrc-navigation-assignment-1-main/build/CMakeFiles/run_tests.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/run_tests.dir/depend
 
