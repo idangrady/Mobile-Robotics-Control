@@ -1,7 +1,12 @@
 #include <emc/io.h>
 #include <emc/rate.h>
-#include <iostream> // Add this line under the other includes
+#include <iostream>
 #include <algorithm>
+#include <cmath>
+
+
+int option = 1;
+
 int main()
 {
  // Create IO object, which will initialize the io layer
@@ -15,22 +20,63 @@ int main()
  emc::LaserData scan;
  // Send a reference to the base controller (vx, vy, vtheta)
 
-float tresh=0.2;
-float min_dis = 1000; 
- if (io.readLaserData(scan))
-{
-	 // Loop through all the laser range measurements
-	for(int i =0; i<scan.ranges.size(); ++i)
-	{
-		float cur_range = scan.ranges[i];
+float minimum_treshold = 0.7;
+float middle_treshold = scan.max_range; // check again
+float min_distance = INFINITY;
 
-		if(cur_range< min_dis) min_dis = cur_range;
+if (io.readLaserData(scan))
+{
+	if(option ==0){
+		int angle_check = 45; // 45 degrees to the left and right of the center
+		int middle_idx = scan.ranges.size() / 2;
+		double angle = scan.angle_increment;
+		int amount = static_cast<int>(angle_check / angle);
+
+		for (int i = -amount; i <= amount; ++i)
+		{
+			float cur_range = scan.ranges[middle_idx + i];
+			if (cur_range < min_distance)
+				min_distance = cur_range;
+		}
 	}
-	std::cout<<"min:" <<min_dis<<std::endl;
-	if(min_dis< tresh){  io.sendBaseReference(0, 0, 0);}
-	else{ 
-	std::cout<<"run:"<<std::endl;
-	 io.sendBaseReference(0.5, 0, 0);}
+	else if(option==1)
+	{
+		double forward_angle = M_PI_4;  // 45 degrees
+		double angle_increment = scan.angle_increment;
+
+		int range_search = static_cast<int>(forward_angle / angle_increment);
+
+		// Calculate the starting and ending indices of the forward angle range
+		int start_index = (scan.ranges.size() / 2) - range_search;
+		int end_index = (scan.ranges.size() / 2) + range_search;
+
+		for (int i = start_index; i <= end_index; ++i)
+		{
+			float cur_range = scan.ranges[i];
+			if (cur_range < min_distance)
+				min_distance = cur_range;
+		}
+	} 
+
+	std::cout << "min found: " << min_distance << std::endl;
+
+	if (min_distance < minimum_treshold)
+	{
+		// Minimum distance below the threshold, stop the robot
+		std::cout << "Detected obstacle: " << min_distance << " meters. Stopping the robot." << std::endl;
+		io.sendBaseReference(0, 0, 0); // Stop the robot
+	}
+	else if (min_distance < middle_treshold)
+	{
+		// Additional condition to check
+		std::cout << "detected max range--- WARNING" << std::endl;
+	}
+	else
+	{
+		// Distance above both thresholds, continue running
+		// std::cout << "No obstacle detected. Running forward." << std::endl;
+		io.sendBaseReference(0.5, 0, 0); // Move the robot forward
+	}
 
 }
 else
