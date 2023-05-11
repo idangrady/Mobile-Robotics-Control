@@ -112,7 +112,7 @@ void Planner::planPath(){
         /*-- End Exercise 3/3 --*/
         std::vector<int> optinm = {_entrance_nodeID};
         Node iterate_node = _nodelist[_finish_nodeID];
-        path_node_IDs.push_front(_finish_nodeID);
+        // path_node_IDs.push_front(_finish_nodeID);
 
         int nodeID = _finish_nodeID;
         while (nodeID != _entrance_nodeID)
