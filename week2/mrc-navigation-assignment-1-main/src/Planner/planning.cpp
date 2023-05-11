@@ -37,9 +37,12 @@ void Planner::planPath(){
         /*-- Exercise 1/3: Find the index of the node with minimum f and store it in the variable nodeID_minimum_f --*/
         // Put your code here
         int min_f =INFINITY;
-        for(int i=0; i< _nodelist.size(); i++)
-        {            
-            if(_nodelist[i].f< min_f) {min_f = _nodelist[i].f; nodeID_minimum_f =i;}
+        for (int i : open_nodes) {
+            if(_nodelist[i].f< min_f) 
+            {
+                min_f = _nodelist[i].f; //open_nodes[i]  open_nodes
+                nodeID_minimum_f =i;
+            }
         }
         /* End Exercise 1/3 */
 
@@ -55,21 +58,41 @@ void Planner::planPath(){
              *                 - If the cost-to-come to such a node via the current node is lower than it was via another node, update it:
              *                     - update g (and f accordingly)
              *                     - update its parent node (should now become equal to the current node) */
-            // Put your code here
-            for(int next_visit_idx : _connections[current_nodeID]){  
-                bool found = (std::find(closed_nodes.begin(), closed_nodes.end(), next_visit_idx) != closed_nodes.end());
+           // Put your code here
+            for(int next_visit_idx : _connections[current_nodeID])
+            {  
 
-                if(found) open_nodes.push_back(next_visit_idx);
+                bool found_closed = (std::find(closed_nodes.begin(), closed_nodes.end(), next_visit_idx) != closed_nodes.end()); // true if found
+                bool found_opened = (std::find(open_nodes.begin(), open_nodes.end(), next_visit_idx) != open_nodes.end());
+
+                // calculate the current distance
                 double cur_distance = calculate_distance(_nodelist[next_visit_idx],_nodelist[current_nodeID]);
-                if(cur_distance + _nodelist[current_nodeID].g < _nodelist[next_visit_idx].f)
+
+                if (!found_closed && !found_opened) 
                 {
-                    // update
-                    _nodelist[next_visit_idx].g = _nodelist[current_nodeID].g + cur_distance;
-                    _nodelist[next_visit_idx].f = _nodelist[next_visit_idx].g + _nodelist[next_visit_idx].f; //  + _nodelist[next_visit_idx].g
+                    // first visit to the node
+                    open_nodes.push_back(next_visit_idx);
+                    // update values
+                     _nodelist[next_visit_idx].g = _nodelist[current_nodeID].g + cur_distance;
+                    _nodelist[next_visit_idx].f = _nodelist[next_visit_idx].g + _nodelist[next_visit_idx].h; //  + _nodelist[next_visit_idx].g
                     _nodelist[next_visit_idx].parent_node_ID = current_nodeID;
-                }
 
                 }
+                else if (!found_closed && found_opened) 
+                {
+                    // already visited
+                    //  check if we should update the table 
+                    if(cur_distance + _nodelist[current_nodeID].g < _nodelist[next_visit_idx].f)
+                    {
+                        // update values if improve
+                        _nodelist[next_visit_idx].g = _nodelist[current_nodeID].g + cur_distance;
+                        _nodelist[next_visit_idx].f = _nodelist[next_visit_idx].g + _nodelist[next_visit_idx].h; //  + _nodelist[next_visit_idx].g
+                        _nodelist[next_visit_idx].parent_node_ID = current_nodeID;
+                    }
+                }
+
+            }
+
                 // calculate distance
             open_nodes.push_back(current_nodeID+1);
             /*-- End Exercise 2/3 --*/
@@ -88,16 +111,18 @@ void Planner::planPath(){
         // Put your code here
         /*-- End Exercise 3/3 --*/
         std::vector<int> optinm = {_entrance_nodeID};
-        Node iterate_node = node_goal;
-        while(iterate_node.parent_node_ID!=_entrance_nodeID )
+        Node iterate_node = _nodelist[_finish_nodeID];
+        path_node_IDs.push_front(_finish_nodeID);
+
+        int nodeID = _finish_nodeID;
+        while (nodeID != _entrance_nodeID)
         {
-            //iterate throught the nodes . until the parent is the starting pos
-            optinm.push_back(iterate_node.parent_node_ID);
-            iterate_node = _nodelist[iterate_node.parent_node_ID];
+            // Iterate through the nodes until there is no more parent node
+            path_node_IDs.push_front(nodeID);
+            nodeID = _nodelist[nodeID].parent_node_ID;
         }
-        // while option
-// start from target
-        
+        // add begininig
+        path_node_IDs.push_front(nodeID);
 
         setPathNodeIDs(path_node_IDs);
         setPathFound(true);
