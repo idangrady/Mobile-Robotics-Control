@@ -1,11 +1,6 @@
 # Mobile-Robotics-Control
 TUe System and Control
 
-
-## Website:
-https://cstwiki.wtb.tue.nl/wiki/Mobile_Robot_Control_2023
-
-
 ## Setting up and Running the MRC Simulator
 
 Follow these instructions to set up and run the MRC simulator on your system:
@@ -25,3 +20,8 @@ Follow these instructions to set up and run the MRC simulator on your system:
 4. **Running the Simulator**:
    - Navigate to the `bin` directory in your repository.
    - Run the simulator by executing the command: `./hello`.
+
+
+
+## Website:
+https://cstwiki.wtb.tue.nl/wiki/Mobile_Robot_Control_2023
