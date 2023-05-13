@@ -1,0 +1,3 @@
+/home/idangrady/Documents/Github/exercises-group-11/week1_try/build/CMakeFiles/rebuild_cache.dir
+/home/idangrady/Documents/Github/exercises-group-11/week1_try/build/CMakeFiles/edit_cache.dir
+/home/idangrady/Documents/Github/exercises-group-11/week1_try/build/CMakeFiles/hello.dir

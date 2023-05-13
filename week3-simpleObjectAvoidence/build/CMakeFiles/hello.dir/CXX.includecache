@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/idangrady/Documents/Github/exercises-group-11/week1_try/src/hello_work.cpp
+emc/io.h
+-
+emc/rate.h
+-
+iostream
+-
+algorithm
+-
+cmath
+-
+unordered_map
+-
+
