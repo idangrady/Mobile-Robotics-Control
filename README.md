@@ -14,7 +14,9 @@ TUe System and Control
 ## Setting up and Running the MRC Simulator
 
 Follow these instructions to set up and run the MRC simulator on your system:
-(for a more detailed explanation, navigate to 'explanation' in week1)
+
+<small>For a more detailed explanation, please refer to the 'Installation_instructions_and_exercises1.pdf' file in Week 1.</small>
+
 1. **Installation**: Make sure the MRC simulator is installed on your system. If you haven't installed it yet, please refer to the simulator's documentation for installation instructions.
 
 2. **Building the Project**:
