@@ -86,26 +86,161 @@ struct obstacle
 };
 
 
-
-// struct vector 3f
-struct vector3f
-{
+// struct vector3f
+struct vector3f {
 public:
-	float x,y,theta;
-	float speed =0.5;
+	float x, y, theta;
+	float speed = 0.5;
+	float Odom = 0;
+	bool right = false;
+	float max_angle;
 
-	vector3f()  =default;
-	vector3f(float x_, float y_, float theta_){x =x_;y =y_; theta = theta_; }
+	vector3f() = default;
+	vector3f(float x_, float y_, float theta_) : x(x_), y(y_), theta(theta_) {}
 
-// operators
-	vector3f operator*(const vector3f vec2){return vector3f(vec2.x * x,vec2.y * y, theta * vec2.theta);}
-	vector3f operator+(const vector3f vec2){return vector3f(vec2.x + x,vec2.y + y, theta + vec2.theta);}
+	// operators
+	vector3f operator*(const vector3f& vec2) {
+		return vector3f(vec2.x * x, vec2.y * y, theta * vec2.theta);
+	}
 
-// functions
-	float get_theta(){return theta;}
-	float get_dir(const float ref){if(ref>theta) return -1; else return 1;}
-	float returnMod(const float ref){return abs(fmod(ref, theta));}
+	vector3f operator+(const vector3f& vec2) {
+		return vector3f(vec2.x + x, vec2.y + y, theta + vec2.theta);
+	}
+
+	std::tuple<float, float> get_X_theta(bool obstacle_detect_) {
+		if (obstacle_detect_) {
+			updateTheta();
+			return std::make_tuple(0, theta);
+		}
+		else {
+			return std::make_tuple(x, 0);
+		}
+	}
+
+	// functions
+	float get_theta() {
+		return theta;
+	}
+
+	float get_dir(const float ref) {
+		if (ref > theta) {
+			return -1;
+		}
+		else {
+			return 1;
+		}
+	}
+
+	float returnMod(const float ref) {
+		return std::abs(std::fmod(ref, theta));
+	}
+
+	void checkOdomMax() {
+		if (std::abs(Odom) > 2) {
+			right = !right; // Toggle the value of right using the negation operator
+		}
+	}
+
+	void checkOdom() {
+		checkOdomMax();
+		if (right) {
+			Odom += 0.1;
+		}
+		else {
+			Odom -= 0.1;
+		}
+	}
+
+	void updateTheta() {
+		checkOdom(); // Decide the direction
+		std::cout << "Odom: " << Odom << std::endl;
+		if (right) {
+			theta = -0.2;
+		}
+		else {
+			theta = 0.2;
+		}
+	}
+
+	void updateThetaObstacle(bool found) {
+		if (found) {
+			updateTheta();
+			x = 0;
+		}
+		else {
+			theta = 0;
+			x = 0.5;
+		}
+	}
 };
+
+
+
+// // struct vector 3f
+// struct vector3f
+// {
+// public:
+// 	float x,y,theta;
+	
+// 	float speed =0.5;
+
+// 	float Odom=0;
+// 	bool right = false;
+// 	float max_angle;
+
+
+// 	vector3f()  =default;
+// 	vector3f(float x_, float y_, float theta_){x =x_;y =y_; theta = theta_; }
+
+// // operators
+// 	vector3f operator*(const vector3f vec2){return vector3f(vec2.x * x,vec2.y * y, theta * vec2.theta);}
+// 	vector3f operator+(const vector3f vec2){return vector3f(vec2.x + x,vec2.y + y, theta + vec2.theta);}
+
+// 	std::tuple<float, float> get_X_theta(bool obstacle_detect_) {
+// 		if (obstacle_detect_) {
+// 			updateTheta();
+// 			return std::make_tuple(0, theta);
+// 		}
+// 		else{
+			
+// 			return std::make_tuple(x, 0);
+// 			}
+// 	}
+	
+	
+
+// // functions
+// 	float get_theta(){return theta;}
+// 	float get_dir(const float ref){if(ref>theta) return -1; else return 1;}
+// 	float returnMod(const float ref){return abs(fmod(ref, theta));}
+
+// 	//
+// 	void checkOdemMax()
+// 	{
+// 		if(abs(Odom)>2) {~right;}  // *(180/M_PI))>
+// 	}
+// 	void checkOdom()
+// 	{
+// 		checkOdemMax();
+// 		if(right){Odom= Odom+ 0.1;}
+// 		else{Odom= Odom- 0.1;}	
+// 	}
+// 	void updateTheta()
+// 	{
+// 		checkOdom(); //decide the direction
+// 		cout<<"Odom: "<< Odom<<endl;
+// 		if(right){theta = -0.2;}
+// 		else{theta =0.2;}
+// 	}
+// 		void updateThetaObstacle(bool found)
+// 	{
+// 		if(found) {updateTheta();x=0; }  //decide the direction
+// 		else{
+// 			theta =0;
+// 			x = 0.5;
+// 			}
+// 	}
+// };
 
 
 // Values

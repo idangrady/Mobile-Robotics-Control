@@ -1,15 +1,8 @@
 #include "utilis.h"
 
 
-int option = 1;
-bool debug = false;
-
-// init total static
-int obstacle::total = 0;
-
 int main()
 {
-	cout<<"updated2";
 	// Create IO object, which will initialize the io layer
 	emc::IO io;
 	// Create Rate object, which will help keep the loop at a fixed frequency
@@ -17,11 +10,12 @@ int main()
 	ObstacleDetector& detector = ObstacleDetector::getInstance(); // can not be copied
 
 	int ref_theta = 0;
+	vector3f dir_vector{0.5, 0, 0};
 
 	// Loop while we are properly connected
 	while (io.ok())
 	{
-		vector3f dir_vector{0.5, 0, 0};
+		dir_vector.max_angle =120;
 		vector<obstacle> obstacles;
 
 		// Create an object / variable that will hold the laser data.
@@ -47,11 +41,16 @@ int main()
 			int begin_idx = -1;
 			bool detecting_obstacle = false;
 			bool ShouldMove = true;
+
+			// always try to go gorward
+			
+
 			float start_beta_obstacle = start_index;
 			// Iterate through the range of indices and detect obstacles
 			int beta_treshold = 40;
 			for (int i = start_index; i <= end_index; i++)
 			{
+
 				const float cur_range = scan.ranges[i];
 				float angle_beta = detector.getBeta(scan.angle_increment,start_index-1, i,scan.ranges);
 				// if(abs(angle_beta- prev)<0.2){cout<<"Same"<<endl;}
@@ -96,22 +95,27 @@ int main()
 						new_obstacle.updateAngles(obstacle_angle_begin,obstacle_angle_end);
 
 						// push
-						cout<<"Pushed! Was : "<<obstacles.size() <<" | update: " << obstacles.size()+1<<endl;
+						// cout<<"Pushed! Was : "<<obstacles.size() <<" | update: " << obstacles.size()+1<<endl;
 						obstacles.push_back(new_obstacle);		
-												if(debug)cout<<"5"<<endl;
+						if(debug)cout<<"5"<<endl;
 						}
 					}
 				}
 			}
-			// // empty obstable vector
-			if(obstacles.size()>0){
-				io.sendBaseReference(0, 0, -0.3); // rotate
-			}
-			else
-			{
-					cout<<" should move" <<endl;
-					io.sendBaseReference(0.5, 0, 0); // forward
-			}
+
+			dir_vector.updateThetaObstacle(obstacles.size()>0);
+			cout<<"DIR Vector x:"<< dir_vector.x<<" y: " << dir_vector.y<<"theta: "<< dir_vector.theta<<endl;
+			io.sendBaseReference(dir_vector.x,0, dir_vector.theta); // rotate
+
+			// // // empty obstable vector
+			// if(obstacles.size()>0){
+			// 	io.sendBaseReference(dir_vector.x, dir_vector.y, dir_vector.theta); // rotate
+			// }
+			// else
+			// {
+			// 		cout<<" should move" <<endl;
+			// 		io.sendBaseReference(0.5, 0, 0); // forward
+			// }
 		}
 		else
 		{
