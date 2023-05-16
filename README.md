@@ -4,7 +4,8 @@ TUe System and Control
 
 ## Progress
 ### week 3
-- [x] Create beta functionality using trig functions, for a smarted and more adaptive obstacle identification
+- [x] Create beta functionality using trig functions, for a smarter and more adaptive obstacle identification
+- [x]  Add Singleton class for the necessary beta trigonometric functionality. 
 - [ ] Connect to created MAP and nodes
 - [ ] Add goal-oriented obstacle avoidance functionality
 - [ ] Use odometry data to estimate robot position and connect it to the decision process
