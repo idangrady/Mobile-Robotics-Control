@@ -1,6 +1,16 @@
 # Mobile-Robotics-Control
 TUe System and Control
 
+
+## Progress
+### week 3
+- [x] Create beta functionality using trig functions, for a smarted and more adaptive obstacle identification
+- [ ] Connect to created MAP and nodes
+- [ ] Add goal-oriented obstacle avoidance functionality
+- [ ] Use odometry data to estimate robot position and connect it to the decision process
+- [ ] Finish global path planning and connect it to local path planning
+
+
 ## Setting up and Running the MRC Simulator
 
 Follow these instructions to set up and run the MRC simulator on your system:
