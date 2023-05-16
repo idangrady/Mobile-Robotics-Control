@@ -1,0 +1,13 @@
+						// End of obstacle
+						const int end_idx = i - 1;
+						const int obstacle_length = end_idx - begin_idx + 1;
+						
+						const float obstacle_angle_begin = get_angle(angle_increment, begin_idx);
+						const float obstacle_angle_end = get_angle(scan.angle_increment, end_idx);
+						const float obstable_angle = abs(obstacle_angle_end -obstacle_angle_begin);
+
+						// // use the cosing rule c^2 = a^2 + b^2 - 2abcos(theta)
+						// const float distance_BC = sqrt(scan.ranges[begin_idx+1]*scan.ranges[begin_idx+1] + scan.ranges[end_idx]*scan.ranges[end_idx] - 2* scan.ranges[end_idx] *scan.ranges[begin_idx+1]*cos(obstable_angle));
+						
+						// // now we use it to find the angle of ABC 
+						// const double beta = acos((distance_BC*distance_BC +scan.ranges[begin_idx+1]*scan.ranges[begin_idx+1] - scan.ranges[end_idx]*scan.ranges[end_idx])/(2*scan.ranges[begin_idx+1]*distance_BC));

@@ -1,0 +1,5 @@
+						// // use the cosing rule c^2 = a^2 + b^2 - 2abcos(theta)
+						// const float distance_BC = sqrt(scan.ranges[begin_idx+1]*scan.ranges[begin_idx+1] + scan.ranges[end_idx]*scan.ranges[end_idx] - 2* scan.ranges[end_idx] *scan.ranges[begin_idx+1]*cos(obstable_angle));
+						
+						// // now we use it to find the angle of ABC 
+						// const double beta = acos((distance_BC*distance_BC +scan.ranges[begin_idx+1]*scan.ranges[begin_idx+1] - scan.ranges[end_idx]*scan.ranges[end_idx])/(2*scan.ranges[begin_idx+1]*distance_BC));

@@ -1,4 +1,4 @@
-# Install script for directory: /home/idangrady/Documents/Github/exercises-group-11/week1_try
+# Install script for directory: /home/idangrady/Documents/Github/Mobile-Robotics-Control/week3-simpleObjectAvoidence
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/idangrady/Documents/Github/exercises-group-11/week1_try/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/idangrady/Documents/Github/Mobile-Robotics-Control/week3-simpleObjectAvoidence/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

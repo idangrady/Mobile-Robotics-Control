@@ -6,7 +6,13 @@
 
 #IncludeRegexTransform: 
 
-/home/idangrady/Documents/Github/exercises-group-11/week1_try/src/hello_work.cpp
+/home/idangrady/Documents/Github/Mobile-Robotics-Control/week3-simpleObjectAvoidence/src/hello_work.cpp
+utilis.h
+/home/idangrady/Documents/Github/Mobile-Robotics-Control/week3-simpleObjectAvoidence/src/utilis.h
+
+/home/idangrady/Documents/Github/Mobile-Robotics-Control/week3-simpleObjectAvoidence/src/utilis.h
+vector
+-
 emc/io.h
 -
 emc/rate.h
