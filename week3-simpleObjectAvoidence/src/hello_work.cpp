@@ -1,31 +1,39 @@
 #include "utilis.h"
 
-
 int main()
 {
 	// Create IO object, which will initialize the io layer
 	emc::IO io;
+	
+
+	printingObject& printingObject = printingObject::getInstance();
 	// Create Rate object, which will help keep the loop at a fixed frequency
 	emc::Rate r(10);
 	ObstacleDetector& detector = ObstacleDetector::getInstance(); // can not be copied
 
 	int ref_theta = 0;
 	vector3f dir_vector{0.5, 0, 0};
+	
+	vector<obstacle> obstacles;
+	emc::OdometryData odomData;
+	emc::OdometryData odomData_prev;
+
 
 	// Loop while we are properly connected
 	while (io.ok())
 	{
 		dir_vector.max_angle =120;
-		vector<obstacle> obstacles;
 
 		// Create an object / variable that will hold the laser data.
 		emc::LaserData scan;
+
 
 		// Send a reference to the base controller (vx, vy, vtheta)
 		float minimum_threshold = 0.7;
 
 		if (io.readLaserData(scan))
 		{
+			io.readOdometryData(odomData);
 			obstacles.clear();
 			// Constants for obstacle detection
 			const double forward_angle = M_PI_4;		   // 45 degrees
@@ -41,9 +49,7 @@ int main()
 			int begin_idx = -1;
 			bool detecting_obstacle = false;
 			bool ShouldMove = true;
-
 			// always try to go gorward
-			
 
 			float start_beta_obstacle = start_index;
 			// Iterate through the range of indices and detect obstacles
@@ -69,7 +75,7 @@ int main()
 				{
 					if (detecting_obstacle==true)
 					{
-						if(debug)cout<<"1"<<endl;
+						if(debug)printingObject.printCurrent();
 						// End of obstacle
 						const int end_idx = i - 1;
 						const int obstacle_length = end_idx - begin_idx + 1;
@@ -77,17 +83,17 @@ int main()
 						const float obstacle_angle_begin = detector.getAngle(angle_increment, begin_idx);
 						const float obstacle_angle_end = detector.getAngle(scan.angle_increment, end_idx);
 						const float obstable_angle = abs(obstacle_angle_end -obstacle_angle_begin);
-						if(debug)cout<<"2"<<endl;
+						if(debug)printingObject.printCurrent();
 
 						detecting_obstacle = false;
 						if (!obstacles.empty() && abs(begin_idx - obstacles.back().end) < 5)
 						{
 							obstacles.back().end = begin_idx;
-							if(debug) cout << "3" << endl;
+							if(debug) printingObject.printCurrent();
 						}
 						else
 						{
-						if(debug)cout<<"4"<<endl;
+						if(debug)printingObject.printCurrent();
 						// Create obstacle object
 						obstacle new_obstacle(begin_idx, end_idx);
 
@@ -97,25 +103,24 @@ int main()
 						// push
 						// cout<<"Pushed! Was : "<<obstacles.size() <<" | update: " << obstacles.size()+1<<endl;
 						obstacles.push_back(new_obstacle);		
-						if(debug)cout<<"5"<<endl;
+						if(debug)printingObject.printCurrent();
 						}
 					}
 				}
 			}
-
+			float maxAngle = detector.getMAxDegree(scan.angle_increment, obstacles);
+			float idxMaxAngle = detector.getIdxAngle(scan.angle_increment,maxAngle);
+			
 			dir_vector.updateThetaObstacle(obstacles.size()>0);
-			cout<<"DIR Vector x:"<< dir_vector.x<<" y: " << dir_vector.y<<"theta: "<< dir_vector.theta<<endl;
-			io.sendBaseReference(dir_vector.x,0, dir_vector.theta); // rotate
+			// cout<<"DIR Vector x:"<< dir_vector.x<<" y: " << dir_vector.y<<"theta: "<< dir_vector.theta<<endl;
+			io.sendBaseReference(dir_vector.x,0, dir_vector.theta); // rotate dir_vector.x
+			cout<<scan.angle_increment<<endl;
+			// Questoion 1+2
+			// printingObject.printingOdomData(odomData);
+			// printingObject.printingOdomDataDifference(odomData, odomData_prev, true);
 
-			// // // empty obstable vector
-			// if(obstacles.size()>0){
-			// 	io.sendBaseReference(dir_vector.x, dir_vector.y, dir_vector.theta); // rotate
-			// }
-			// else
-			// {
-			// 		cout<<" should move" <<endl;
-			// 		io.sendBaseReference(0.5, 0, 0); // forward
-			// }
+
+
 		}
 		else
 		{
