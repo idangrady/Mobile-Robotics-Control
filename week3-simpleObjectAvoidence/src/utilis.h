@@ -24,6 +24,7 @@ struct obstacle
 		else
 			{angle_end = angle_;}
 	} 
+
 	void updateAngles(const float angle_begin_, const float angle_end_)  // if b =0 -> begin else end
 	{
 		angle_begin =angle_begin_;
@@ -56,7 +57,7 @@ public:
 	vector3f operator*(const vector3f& vec2) {
 		return vector3f(vec2.x * x, vec2.y * y, theta * vec2.theta);
 	}
-
+	float getLength() const {return sqrt(x*x+ y*y);}
 	vector3f operator+(const vector3f& vec2) {
 		return vector3f(vec2.x + x, vec2.y + y, theta + vec2.theta);
 	}
@@ -70,7 +71,6 @@ public:
 			return std::make_tuple(x, 0);
 		}
 	}
-
 	// functions
 	float get_theta() {
 		return theta;
@@ -84,43 +84,34 @@ public:
 			return 1;
 		}
 	}
-
 	float returnMod(const float ref) {
 		return std::abs(std::fmod(ref, theta));
 	}
-
 	void checkOdomMax() {
 		if (std::abs(Odom) > 2) {
 			right = !right; // Toggle the value of right using the negation operator
 		}
 	}
-
 	void checkOdom() {
 		checkOdomMax();
 		Odom += (right ? 0.1 : -0.1);
 	}
 
-	// float thetaInRad(){return }
 	void updateTheta() {
 		checkOdom();
 		theta = (right ? -0.2 : 0.2);
 		if(debug) std::cout << "Odom: " << Odom << std::endl;
 	}
-
-
 	void updateThetaObstacle(bool found) {
 		if (found) {
 			updateTheta();
-			theta = 0.0;
-		} else {
+ 		} else {
 			theta = 0.2;
 		}
 		x = (found ? 0.0 : 0.5);
 	}
+	void updateOdom(float odom_){Odom =odom_;}
 };
-
-
-
 
 // SingleTom
 class ObstacleDetector {
@@ -129,7 +120,6 @@ public:
         static ObstacleDetector instance;
         return instance;
     }
-
     ObstacleDetector(const ObstacleDetector&) = delete; // Disable copy constructor
     ObstacleDetector& operator=(const ObstacleDetector&) = delete; // Disable assignment operator
 
@@ -140,53 +130,65 @@ public:
 	{
 		return (int)(angle/increment);
 	}
-
     inline float getAngleMiddle(float increment, int i, int j) {
         return ((j - i) * increment);
     }
-
 	inline int getOpeningSize(obstacle & obs1, obstacle & obs2 )
 	{
 		return obs2.begin - obs1.end;
 	}
-    float getBeta(float angleIncrement, int beginIdx, int endIdx, const std::vector<float>& ranges) {
+	inline float square(float num){return num*num;}
+    float getBeta(float angleIncrement, int beginIdx, int endIdx, const std::vector<float>& ranges, bool degree =false) {
         const float obstacleAngleBegin = getAngle(angleIncrement, beginIdx);
         const float obstacleAngleEnd = getAngle(angleIncrement, endIdx);
         const float obstacleAngle = std::abs(obstacleAngleEnd - obstacleAngleBegin);
 
         const float distanceBC = std::sqrt(
-            ranges[beginIdx + 1] * ranges[beginIdx + 1] +
-            ranges[endIdx] * ranges[endIdx] -
-            2 * ranges[endIdx] * ranges[beginIdx + 1] * std::cos(obstacleAngle)
+			square(ranges[beginIdx])+ square(ranges[endIdx])+
+            2 * ranges[endIdx] * ranges[beginIdx] * std::cos(obstacleAngle)
         );
         const double beta = std::acos(
-            (distanceBC * distanceBC + ranges[beginIdx + 1] * ranges[beginIdx + 1] - ranges[endIdx] * ranges[endIdx]) /
-            (2 * ranges[beginIdx + 1] * distanceBC)
+            (square(distanceBC) +  square(ranges[beginIdx]) -square(ranges[endIdx])) /
+            (2 * ranges[beginIdx] * distanceBC)
         );
-
-        return static_cast<float>(beta * (180.0 / M_PI)); // return in degrees
+		// bc = num
+		// AB, BC, AC     
+		//  AB = range[begin], AC = range[end] , BC^2 = AB^2 +AC^2 + AC*AB*2COS(theta)
+		// Beta -> BC^2 + AB^2 - 2cos(beta) AB*BC   = AC^2
+		//  cos(beta) = (BC^2 + AB^2 -AC^2) /AB*BC*2
+		
+		if(degree) return static_cast<float>(beta * (180.0 / M_PI));  // return in degrees
+        return beta; 
 	}
 	
+	int sign(float num){
+		int out (num>0 ? 1 : -1);
+		out = (num==0?0:out);
+		return out;
+		}
 	float getMAxDegree(const float increment, std::vector<obstacle>& detectedObstables) 
 	{
 		int amontObstacle = detectedObstables.size();	
-		float maxDegree;
-		float maxOpeningSize = std::numeric_limits<float>::infinity();
+		if(debug) cout<<"Amount of detected Obstacle "<< amontObstacle <<endl;
+		float maxDegree=-1;
+		float maxOpeningSize = 0;
 		for(int i = 0; i<amontObstacle-1; i++)
 		{
 			int currrentSize = getOpeningSize(detectedObstables[i], detectedObstables[i+1]); // ended at size-1  so we wont go after the boundries.
-			if(currrentSize<maxOpeningSize)
+			if(currrentSize>maxOpeningSize)
 			{
 				maxOpeningSize= currrentSize;
 				maxDegree  = getAngle(increment,(detectedObstables[i+1].begin + detectedObstables[i].end)/2 ); //*get the middle part*// 
 			}
 		} // have the max size and the degree
+		if (maxDegree == -1) {
+			maxDegree = 0.0; // Set maxDegree to a default value if no valid opening size is found
+		}
 		if(debugObstacleDetector==true) cout<<"Max Degree size: "<<maxOpeningSize<<endl;
 		// we should adapt the steering so that go toward the max degree. 
 		return maxDegree;
-		
-
 	}	
+
 private:
     ObstacleDetector() = default; // Private constructor to prevent instantiation
 };

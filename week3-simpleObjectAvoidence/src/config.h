@@ -15,7 +15,16 @@ using namespace std;
 // Values
 int option = 1;
 bool debug = false;
-bool debugObstacleDetector = true;
+bool printAngles = true;
+bool debugObstacleDetector = false;
+bool printDetectedObstacles = true;
+
+
+int targetx =0;
+int targety =0;
+int targettheta =0;
+
+int beta_treshold = 40;
 
 bool wheelsleep = false; // turning uncertaint odometry
 

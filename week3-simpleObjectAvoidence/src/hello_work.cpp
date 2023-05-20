@@ -1,5 +1,9 @@
 #include "utilis.h"
 
+
+int maxDepth = 3;
+
+// #include "config.h"
 int main()
 {
 	// Create IO object, which will initialize the io layer
@@ -13,11 +17,12 @@ int main()
 
 	int ref_theta = 0;
 	vector3f dir_vector{0.5, 0, 0};
+	vector3f target(targetx, targety, targettheta);
 	
 	vector<obstacle> obstacles;
 	emc::OdometryData odomData;
 	emc::OdometryData odomData_prev;
-
+	
 
 	// Loop while we are properly connected
 	while (io.ok())
@@ -26,17 +31,17 @@ int main()
 
 		// Create an object / variable that will hold the laser data.
 		emc::LaserData scan;
-
-
 		// Send a reference to the base controller (vx, vy, vtheta)
 		float minimum_threshold = 0.7;
-
+		
 		if (io.readLaserData(scan))
 		{
+			
+			dir_vector.theta = scan.angle_increment;
 			io.readOdometryData(odomData);
 			obstacles.clear();
 			// Constants for obstacle detection
-			const double forward_angle = M_PI_4;		   // 45 degrees
+			const double forward_angle = M_PI_2;		   // 45 degrees
 			const double angle_increment = scan.angle_increment;
 			const float minimum_threshold = 0.7;		   // Minimum threshold for obstacle detection
 
@@ -53,73 +58,83 @@ int main()
 
 			float start_beta_obstacle = start_index;
 			// Iterate through the range of indices and detect obstacles
-			int beta_treshold = 40;
 			for (int i = start_index; i <= end_index; i++)
 			{
 
 				const float cur_range = scan.ranges[i];
 				float angle_beta = detector.getBeta(scan.angle_increment,start_index-1, i,scan.ranges);
-				// if(abs(angle_beta- prev)<0.2){cout<<"Same"<<endl;}
-				// cout<<"Beta: "<<angle_beta<<endl;
-				if(cur_range < minimum_threshold && !detecting_obstacle)
+ 
+				if(cur_range>maxDepth) scan.ranges[i] = maxDepth; //clapping
+				else if (cur_range < minimum_threshold && !detecting_obstacle)
 				{
-					detecting_obstacle = true; 
-					begin_idx =i;
-					start_beta_obstacle = detector.getBeta(scan.angle_increment,i, i+1,scan.ranges); // start beta obst
-				}
-				else if (detecting_obstacle==true && abs(start_beta_obstacle-angle_beta)<=beta_treshold)
-				{
-					continue;
-				}
-				else
-				{
-					if (detecting_obstacle==true)
-					{
-						if(debug)printingObject.printCurrent();
-						// End of obstacle
-						const int end_idx = i - 1;
-						const int obstacle_length = end_idx - begin_idx + 1;
-						
-						const float obstacle_angle_begin = detector.getAngle(angle_increment, begin_idx);
-						const float obstacle_angle_end = detector.getAngle(scan.angle_increment, end_idx);
-						const float obstable_angle = abs(obstacle_angle_end -obstacle_angle_begin);
-						if(debug)printingObject.printCurrent();
+					detecting_obstacle = true;
+					begin_idx = i;
+					start_beta_obstacle = detector.getBeta(scan.angle_increment, i-1, i, scan.ranges); // start beta of the obstacle
+					// cout<<"Start!. start_beta_obstacle: "<<start_beta_obstacle<<endl;
 
+				}
+				else if (detecting_obstacle)
+				{
+					const int end_idx = i - 1;
+					const int obstacle_length = end_idx - begin_idx + 1;
+
+					const float obstacle_angle_begin = detector.getAngle(angle_increment, begin_idx);
+					const float obstacle_angle_end = detector.getAngle(scan.angle_increment, end_idx);
+					const float obstacle_angle = abs(obstacle_angle_end - obstacle_angle_begin);
+					const float angle_beta = detector.getBeta(scan.angle_increment, start_beta_obstacle, i, scan.ranges);
+					const float beta_diff = abs(angle_beta - start_beta_obstacle); // Difference in beta values
+					// cout<<beta_diff<<endl;
+					if (obstacle_length >= 20 && beta_diff>0.25)
+					{
+						// cout<<"Added: " <<obstacle_length<< ", "<<beta_diff<<endl;
 						detecting_obstacle = false;
-						if (!obstacles.empty() && abs(begin_idx - obstacles.back().end) < 5)
-						{
-							obstacles.back().end = begin_idx;
-							if(debug) printingObject.printCurrent();
-						}
-						else
-						{
-						if(debug)printingObject.printCurrent();
 						// Create obstacle object
 						obstacle new_obstacle(begin_idx, end_idx);
-
 						// Update obstacle angle
-						new_obstacle.updateAngles(obstacle_angle_begin,obstacle_angle_end);
-
-						// push
-						// cout<<"Pushed! Was : "<<obstacles.size() <<" | update: " << obstacles.size()+1<<endl;
-						obstacles.push_back(new_obstacle);		
-						if(debug)printingObject.printCurrent();
-						}
+						new_obstacle.updateAngles(obstacle_angle_begin, obstacle_angle_end);
+						// Push to the obstacles list
+						obstacles.push_back(new_obstacle);
 					}
-				}
 			}
+    
+
+			}
+
 			float maxAngle = detector.getMAxDegree(scan.angle_increment, obstacles);
 			float idxMaxAngle = detector.getIdxAngle(scan.angle_increment,maxAngle);
-			
-			dir_vector.updateThetaObstacle(obstacles.size()>0);
-			// cout<<"DIR Vector x:"<< dir_vector.x<<" y: " << dir_vector.y<<"theta: "<< dir_vector.theta<<endl;
-			io.sendBaseReference(dir_vector.x,0, dir_vector.theta); // rotate dir_vector.x
-			cout<<scan.angle_increment<<endl;
+
+			float curOdomData  =odomData.a;
+			float difference = maxAngle -curOdomData;
+			if(printAngles==true&& obstacles.size()>0)
+			{
+				cout<<"distance to max middle: " <<scan.ranges[idxMaxAngle]<<  idxMaxAngle<<endl;
+				cout<<"difference: "<<difference<<endl;
+				cout<<detector.sign(difference)<<endl;
+				cout<<"Max Angle: " <<maxAngle <<" , idxMax Angle: " <<  idxMaxAngle<<endl;
+				cout<<"Odom: " <<curOdomData <<endl;
+				cout<<"difference: "<<difference<<endl;
+				cout<<"Amount of steps needed-> " << difference/0.1<<endl;
+			}
+
+			if(printDetectedObstacles)
+			{
+				cout<<"detected Obstacles: "<<obstacles.size()<<endl;
+				for(int i =0; i<obstacles.size(); i++)
+				{
+					cout<<"Obstcle " <<i <<"begin: "<< obstacles[i].begin <<" " << "-End:"<<obstacles[i].end<<endl;
+				}
+			}
+			if(obstacles.size()){
+				cout << "sign: "<<detector.sign(difference)<<endl;
+				for(int i =0; i<(int)(difference/0.1);i++)
+				{
+					io.sendBaseReference(0,0, -detector.sign(difference)*0.1);
+				}
+			}
+			else io.sendBaseReference(0.5,0, 0);	
 			// Questoion 1+2
 			// printingObject.printingOdomData(odomData);
 			// printingObject.printingOdomDataDifference(odomData, odomData_prev, true);
-
-
 
 		}
 		else

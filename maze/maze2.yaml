@@ -1,6 +1,6 @@
-image: linesMaze.pgm
+image: simpleMaze.png
 resolution: 0.025
-origin: [0.0, 0.0, -1.570796]
+origin: [0, 0, 0] #-1.570796
 occupied_thresh: 0.9
 free_thresh: 0.1
 negate: 0
