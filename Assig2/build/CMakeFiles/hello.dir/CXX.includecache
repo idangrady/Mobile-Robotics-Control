@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/sarthak/mrc/Mobile-Robot-Control/Week_2/try/src/hello.cpp
+emc/io.h
+-
+emc/rate.h
+-
+iostream
+-
+algorithm
+-
+cmath
+-
+
