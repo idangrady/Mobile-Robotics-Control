@@ -137,6 +137,7 @@ public:
 	{
 		return obs2.begin - obs1.end;
 	}
+	// inline getLocNode(float theta, ){}
 	inline float square(float num){return num*num;}
     float getBeta(float angleIncrement, int beginIdx, int endIdx, const std::vector<float>& ranges, bool degree =false) {
         const float obstacleAngleBegin = getAngle(angleIncrement, beginIdx);
@@ -166,21 +167,33 @@ public:
 		out = (num==0?0:out);
 		return out;
 		}
-	float getMAxDegree(const float increment, std::vector<obstacle>& detectedObstables) 
+	float getMAxDegree(const float increment, std::vector<obstacle>& detectedObstacles) 
 	{
-		int amontObstacle = detectedObstables.size();	
-		if(debug) cout<<"Amount of detected Obstacle "<< amontObstacle <<endl;
+		int amountObstacles = detectedObstacles.size();	
+		if(debug) cout<<"Amount of detected Obstacle "<< amountObstacles <<endl;
 		float maxDegree=-1;
 		float maxOpeningSize = 0;
-		for(int i = 0; i<amontObstacle-1; i++)
-		{
-			int currrentSize = getOpeningSize(detectedObstables[i], detectedObstables[i+1]); // ended at size-1  so we wont go after the boundries.
-			if(currrentSize>maxOpeningSize)
-			{
-				maxOpeningSize= currrentSize;
-				maxDegree  = getAngle(increment,(detectedObstables[i+1].begin + detectedObstables[i].end)/2 ); //*get the middle part*// 
+		if (amountObstacles == 1) {
+			const obstacle& onlyObstacle = detectedObstacles[0];
+			int currentSize = onlyObstacle.end - onlyObstacle.begin;
+			cout << "currentSize: " << currentSize << endl;
+
+			if (currentSize > maxOpeningSize) {
+				maxOpeningSize = currentSize;
+				maxDegree = (getAngle(increment, onlyObstacle.begin) + getAngle(increment, onlyObstacle.end)) / 2;
 			}
-		} // have the max size and the degree
+		} else if (amountObstacles > 1) {
+			for (int i = 0; i < amountObstacles - 1; i++) {
+				int currentSize = getOpeningSize(detectedObstacles[i], detectedObstacles[i+1]);
+				cout << "currentSize: " << currentSize << endl;
+				
+				if (currentSize > maxOpeningSize) {
+					maxOpeningSize = currentSize;
+					maxDegree = getAngle(increment, (detectedObstacles[i+1].begin + detectedObstacles[i].end) / 2);
+				}
+			}
+		}
+
 		if (maxDegree == -1) {
 			maxDegree = 0.0; // Set maxDegree to a default value if no valid opening size is found
 		}
@@ -196,7 +209,78 @@ private:
 // init obstacle static var to 0
 int obstacle::total = 0;
 
+class signalOperations
+{
+	public:
+	static signalOperations & getInstance(){
+		 static signalOperations instance;
+		return instance;
+	}
+	signalOperations(const signalOperations&) = delete; // Disable copy constructor
+    signalOperations& operator=(const signalOperations&) = delete; // Disable assignment operator
+	std::vector<float> applyMovingAverage(const std::vector<float>& signal, int numSamples)
+	{
+		std::vector<float> result;
+		int signalSize = signal.size();
 
+		for (int i = 0; i < signalSize; ++i) {
+			float sum = 0.0;
+			int count = 0;
+
+			// Calculate the sum of 'numSamples' values around the current index
+			for (int j = i - numSamples / 2; j <= i + numSamples / 2; ++j) {
+				if (j >= 0 && j < signalSize) {
+					sum += signal[j];
+					++count;
+				}
+			}
+
+			// Calculate the average and add it to the result vector
+			if (count > 0) {
+				float average = sum / count;
+				result.push_back(average);
+			}
+		}
+
+		return result;
+	}
+
+ 	std::vector<float> applyGaussianFilter(const std::vector<float>& signal, int length, float sigma) {
+		std::vector<float> kernel(length);
+		std::vector<float> smoothed(signal.size());
+
+		// Calculate the kernel
+		float sum = 0.0;
+		for (int i = 0; i < length; ++i) {
+			float x = i - length / 2;
+			kernel[i] = std::exp(-(x * x) / (2 * sigma * sigma));
+			sum += kernel[i];
+		}
+
+		// Normalize the kernel
+		for (int i = 0; i < length; ++i) {
+			kernel[i] /= sum;
+		}
+
+		// Apply the Gaussian filter
+		for (int i = 0; i < signal.size(); ++i) {
+			float value = 0.0;
+			for (int j = 0; j < length; ++j) {
+				int index = i + j - length / 2;
+				if (index >= 0 && index < signal.size()) {
+					value += signal[index] * kernel[j];
+				}
+			}
+			smoothed[i] = value;
+		}
+
+		return smoothed;
+	}
+
+
+	private:
+	signalOperations() = default;
+};
 // Singeltom printing
 class printingObject
 {
@@ -226,7 +310,145 @@ public:
 		cout<<currentPrintingVal<<endl;
 		currentPrintingVal++;
 	}
-	
+
+	cv::Mat findCorners(const std::vector<float>& values, double threshold=0.005)
+	{
+		// Convert the values vector to a grayscale image
+		cv::Mat image(values.size(), 1, CV_32F);
+		for (int i = 0; i < values.size(); ++i)
+		{
+			image.at<float>(i, 0) = values[i];
+		}
+ 		// Convert the grayscale image to a 32-bit floating-point format
+	    image.convertTo(image, CV_32F);
+
+		// Apply Harris corner detection
+		cv::Mat cornerResponse;
+		cv::cornerHarris(image, cornerResponse, 3, 3, 0.04);
+
+		// Threshold the corner response to find corners
+		cv::Mat cornerMask;
+		cv::threshold(cornerResponse, cornerMask, threshold, 255, cv::THRESH_BINARY);
+
+  
+		// for(int i=0; i<values.size(); i++){
+		// 	cout<<", " <<image.at<float>(i, 0);
+		// }
+		// for(int i=0; i<values.size(); i++){
+		// 	cout<<", " <<cornerMask.at<float>(i, 0);
+		// }
+		// cout<<"cornerResponse: "<< cornerResponse.size()<<endl;
+   	 // Find corner indices
+  		return cornerMask;
+	}
+
+
+void findCornersAndPlot(const std::vector<float>& values, double threshold = 0.005, const std::string& windowName = "Scatter Plot")
+{
+
+	cv::Mat corners = findCorners(values,threshold);
+	cout<<corners.size()<<endl;
+ 
+
+    double minVal = *std::min_element(values.begin(), values.end());
+    double maxVal = *std::max_element(values.begin(), values.end());
+	double range = maxVal - minVal;
+
+	cv::Mat scatterPlot(values.size(), 600, CV_8UC3, cv::Scalar(255, 255, 255));
+    int x = 0;
+    bool drawLine = false;
+    for (const double& value : values) {
+	// 	cout<<"corners[x] "<<corners.at<float>(x, 0)<<endl;
+        if (corners.at<float>(x, 0)==255 ||value==-1) {
+            // Draw a vertical line
+             drawLine = true;
+            cv::line(scatterPlot, cv::Point(x, 0), cv::Point(x, scatterPlot.rows - 1), cv::Scalar(20, 100, 20), 5);
+        } else {
+            // Calculate the normalized position of the data point
+            int y = static_cast<int>((scatterPlot.rows - 1) - ((value - minVal) / range * (scatterPlot.rows - 1))) + 100;
+             // Set the color based on the range index
+            cv::Scalar color(100, 0, 100);
+			if(value==0) color=cv::Scalar(0,0,0);
+            // Draw a circle at the data point position with the determined color
+            cv::circle(scatterPlot, cv::Point(x, y), 3, color, cv::FILLED);
+        }
+        x++;
+    }
+ 
+    // Display the scatter plot with vertical lines
+    cv::imshow(windowName, scatterPlot);
+    cv::waitKey(1);
+}
+
+void plotScatter(const std::vector<float>& data, std::vector<int>& obsIdx, std::string windowName_)
+{
+    if (data.empty()) {
+        std::cout << "Data vector is empty." << std::endl;
+        return;
+    }
+
+	// std::vector<int> xxx = findCorners(data);
+    // Create a black image with a white background
+    cv::Mat image(data.size(), 600, CV_8UC3, cv::Scalar(255, 255, 255));
+
+    // Determine the minimum and maximum values in the data
+    float minVal = *std::min_element(data.begin(), data.end());
+    float maxVal = *std::max_element(data.begin(), data.end());
+
+    // Calculate the range of data values
+    float range = maxVal - minVal;
+
+    // Calculate the color step for each range
+    int colorStep = 0;
+    if (!obsIdx.empty()) {
+        int sizeObjects = obsIdx.size() / 2;
+        colorStep = 255 / sizeObjects;
+    }
+
+    // Plot the data points as circles on the image
+    int x = 0;
+	bool stp = false;
+    cv::Scalar color(0, 255, 255);
+    for (const float& value : data) {
+        if (value == -1) {
+            // Draw a straight line from the bottom to the top
+			// cout<<"Line Drawn: x: "<<x<<endl;
+			stp = true;
+	        cv::line(image, cv::Point(x, 0), cv::Point(x, 500 - 1), cv::Scalar(20, 100, 20), 5);
+
+        } else if (value == 0) {
+            // Set color to white
+            color = cv::Scalar(255, 255, 255);
+        } else {
+            // Calculate the normalized position of the data point
+            int y = static_cast<int>(image.rows - 1 - ((value - minVal) / range * (image.rows - 1))) + 100;
+            // Determine the color based on the range index
+            int rangeIndex = -1; 
+            // Set the color based on the range index
+            color = cv::Scalar(rangeIndex * colorStep, 0, 255 - rangeIndex * colorStep);
+            // Draw a circle at the data point position with the determined color
+           cv::circle(image, cv::Point(x, y), 3, color, cv::FILLED);
+        }
+        x++;
+    }
+
+    // Display the scatter plot
+    cv::imshow(windowName_, image);
+	// if(stp) cv::waitKey(10000); 
+    cv::waitKey(1);
+}
+
+
+void printDetectedObstacles(const std::vector<obstacle>& obstacles)
+{
+    std::cout << "Detected Obstacles: " << obstacles.size() << std::endl;
+    for (int i = 0; i < obstacles.size(); i++)
+    {
+        std::cout << "Obstacle " << i << ": Begin = " << obstacles[i].begin << ", End = " << obstacles[i].end << std::endl;
+    }
+}
+
+
 private:
 	printingObject() = default;
 };

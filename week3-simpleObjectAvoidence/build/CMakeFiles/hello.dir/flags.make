@@ -6,5 +6,5 @@ CXX_FLAGS =
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = 
+CXX_INCLUDES = -I/usr/include/python3.8 -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/week3-simpleObjectAvoidence/include -isystem /usr/include/opencv4 
 
