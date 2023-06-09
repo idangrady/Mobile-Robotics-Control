@@ -2,7 +2,7 @@
 
 
 int maxDepth = 3;
-
+float lastThetaMax =-1;
 // #include "config.h"
 int main()
 {
@@ -10,7 +10,7 @@ int main()
 	emc::IO io;
 	
 
-	printingObject& printingObject = printingObject::getInstance();
+	printingObject& printingObject = printingObject::getInstance(); 
 	// Create Rate object, which will help keep the loop at a fixed frequency
 	emc::Rate r(10);
 	ObstacleDetector& detector = ObstacleDetector::getInstance(); // can not be copied
@@ -37,12 +37,12 @@ int main()
 			vector<float> filteredData = signalOperator.applyMovingAverage(scan.ranges, 5);
 			scan.ranges = filteredData;
 			dir_vector.theta = scan.angle_increment;
-			// io.readOdometryData(odomData);
-			obstacles.clear();
+			io.readOdometryData(odomData);
+			// obstacles.clear();
 			// Constants for obstacle detection
-			const double forward_angle = M_PI_2;		   // 45 degrees
+			const double forward_angle = M_PI_4;		   // 45 degrees
 			const double angle_increment = scan.angle_increment;
-			const float minimum_threshold = 0.7;		   // Minimum threshold for obstacle detection
+			const float minimum_threshold = 1.2;		   // Minimum threshold for obstacle detection
 
 			// Calculate the range of indices to search for obstacles
 			const int range_search = static_cast<int>(forward_angle / angle_increment);
@@ -56,7 +56,9 @@ int main()
  			int begin_idx = start_index-1;
 			float start_beta_obstacle = start_index;
  			// Iterate through the range of indices and detect obstacles
-										
+			print_vec.push_back(-1);				
+			bool stright = true;	
+
 		for (int i = start_index; i <= end_index; i++)
 		{
 			const float cur_range = scan.ranges[i];
@@ -75,7 +77,7 @@ int main()
 				detecting_obstacle = true;
 				begin_idx = i;
 				start_beta_obstacle = detector.getBeta(scan.angle_increment, i - 1, i, scan.ranges); // start beta of the obstacle
-				cout << "Start Obstacle " << i << endl;
+				//cout << "Start Obstacle " << i << endl;
 			}
 			else if (cur_range > minimum_threshold && detecting_obstacle)
 			{
@@ -84,16 +86,12 @@ int main()
 				const float obstacle_angle = abs(obstacle_angle_end - obstacle_angle_begin);
 				const float angle_beta = detector.getBeta(scan.angle_increment, start_index, i, scan.ranges);
 				const float beta_diff = abs(angle_beta - start_beta_obstacle); // Difference in beta values
-					// cout<<"beta_diff: "<<beta_diff<<endl;
-					if ((beta_diff > beta_treshold && obstacle_length > minObstLength) || (i >= end_index))
+ 
+ 					if ((beta_diff > beta_treshold && obstacle_length > minObstLength) || (i >= end_index))
 					{
 						detecting_obstacle = false;
 						print_vec.push_back(-1);
-
-						obstacle new_obstacle(begin_idx, end_idx);
-						new_obstacle.updateAngles(obstacle_angle_begin, obstacle_angle_end);
-						obstacles.push_back(new_obstacle);
-						cout << "End Obstacle " << end_idx << endl;
+ 						stright = false;
 					}
 					else
 					{
@@ -102,61 +100,96 @@ int main()
 			}
 			else
 			{
-				if(cur_range <= 2*minimum_threshold) print_vec.push_back(angle_beta);
+				if(cur_range <=  minimum_threshold) print_vec.push_back(angle_beta);
 				else{print_vec.push_back(0);}
-
  			}
 		if(detecting_obstacle&& i==end_index)
 		{
 			// close opened obstacle at the end
+ 			detecting_obstacle = false;
 			print_vec.push_back(-1);
-			detecting_obstacle = false;
-			print_vec.push_back(-1);
-			obstacle new_obstacle(begin_idx, end_idx);
-			new_obstacle.updateAngles(detector.getAngle(scan.angle_increment, begin_idx), detector.getAngle(scan.angle_increment, end_idx));
-			obstacles.push_back(new_obstacle);
-			cout << "End Obstacle " << end_idx << endl;
-		}			
+ 		}			
  		}
- 			if(begin_idx>start_index-1)printingObject.findCornersAndPlot(print_vec, 100, "Moving Average Data");
-			float maxAngle = detector.getMAxDegree(scan.angle_increment, obstacles);
-			cout<<"maxAngle: " << maxAngle<<endl;
-			// float idxMaxAngle = detector.getIdxAngle(scan.angle_increment, maxAngle);
 
-			float curOdomData = odomData.a;
-			float difference = maxAngle - curOdomData;
+			tuple<int, int> result  = printingObject.findCornersAndPlot(print_vec, 100, "PostProcessed");
+			int moveforward, maxIdx;
+			std::tie(moveforward, maxIdx) = result;
 
-			cout << "Num Detected Obstacle: " << obstacles.size() << endl;
-
-		    double targetTheta = std::atan2(targetY - odomData.y, targetX - odomData.x);
-		    double distanceToTarget = std::hypot(targetX - odomData.x, targetY - odomData.y);
+			// bool narrowedViewForwardCheck = detector.canMoveForwardNarrowedBand(print_vec, ) 
+			float maxAngle = detector.getAngle(scan.angle_increment, maxIdx+ start_index); //
+			double targetTheta = std::atan2(targetY - odomData.y, targetX - odomData.x);
+			double distanceToTarget = std::hypot(targetX - odomData.x, targetY - odomData.y);
 
 
-   			std::cout << "Target Theta: " << targetTheta << std::endl;
-	    	std::cout << "Distance to Target: " << distanceToTarget << std::endl;
+			lastThetaMax =maxAngle;
+			// tresholds
+			const float targetThreshold = 0.11;
+			const float ObstacleThreshold = 0.11;
+			// calculate theta
+			float curTheta =  odomData.a; // detector.getAngle(scan.angle_increment, (scan.ranges.size())/2) +
+			int middleIdx = detector.getIdxAngle(scan.angle_increment,curTheta);
 
-			const float targetThreshold= 0.4;
-			double thetaError = targetTheta - odomData.a;
 
-			for (int i =0; i<3; i++)
-			{
-            	if (io.readOdometryData(odomData))
-			{
- 				io.sendBaseReference(begin_idx >= start_index ? 0 : 0.5, 0, 0.1 * (begin_idx >= start_index ? 1 : 0)); 		
-				targetTheta = std::atan2(targetY - odomData.y, targetX - odomData.x);
-				distanceToTarget = std::hypot(targetX - odomData.x, targetY - odomData.y);
-				std::cout << "Target Theta: " << targetTheta << std::endl;
-	    		std::cout << "Distance to Target: " << distanceToTarget << std::endl;
+			
+			// errors
+			double thetaErrorTarget = (targetTheta - curTheta);
+			double thetaErrorObstacle = (maxAngle - curTheta);
 
-				}
-				else{				
-					std::cout << "Error to read Odometry Data" << std::endl;
-				}
-			}
-		}		
+ 			float curDistance = 1.2 * minimum_threshold;
+			bool rotateTowardTarget = false;
+			int size_vec = print_vec.size();
+
+			float moveForwardSpeed =0.1;
+			float rotationSpeed = 0.1;
+			int middleIdxCheck =30;
+
+			std::cout<<"targetTheta "<< targetTheta<<", curTheta: "<<curTheta<<", distanceToTarget: "<<distanceToTarget<<endl;
+ 			std::cout<<"x "<< odomData.x<<", y"<< odomData.y<<", "<< odomData.a<<endl; 
+ 			std::cout<<"maxAngle "<< maxAngle<<", thetaErrorObstacle"<< thetaErrorObstacle<<endl; 
+
+
+// THESE ARE THE CORRECT
+  		//	if(std::abs((thetaErrorTarget) < targetThreshold)&& (std::abs(thetaErrorObstacle)< ObstacleThreshold))io.sendBaseReference(moveForwardSpeed,0,0);
+			// Target
+ 			// while (std::abs(thetaErrorTarget) >= targetThreshold)
+			// 	{
+ 			// 		io.sendBaseReference(0, 0, (thetaErrorTarget > 0 ?  rotationSpeed : -rotationSpeed)); // abs(size_vec- 2*middleIdx)<middleIdxCheck?moveForwardSpeed:0
+			// 		curTheta  +=(thetaErrorTarget < 0 ?  rotationSpeed : -rotationSpeed);
+			// 		thetaErrorTarget +=(thetaErrorTarget>0 ? -rotationSpeed: rotationSpeed);// targetTheta - curTheta;
+			// 		cout << "Rotate-Target " << (thetaErrorTarget > 0 ? "Positive:.1" : "Negative:-.1") << " | Error = " << thetaErrorTarget << endl;
+  			// 	}
+
+			cout<<"Difference before OB:"<<thetaErrorObstacle<<endl;
+
+// MOFIDIED FOR EXPERIMENT BEGIN
+  			if(std::abs((thetaErrorTarget) < targetThreshold)|| (std::abs(thetaErrorObstacle)< ObstacleThreshold))io.sendBaseReference(moveForwardSpeed,0,0);
+			while (std::abs(thetaErrorObstacle) >= ObstacleThreshold)
+				{
+ 					io.sendBaseReference(0, 0, (thetaErrorObstacle > 0 ?  rotationSpeed : -rotationSpeed)); // abs(size_vec- 2*middleIdx)<middleIdxCheck?moveForwardSpeed:0
+					curTheta  +=(thetaErrorObstacle < 0 ?  rotationSpeed : -rotationSpeed);
+					thetaErrorObstacle +=(thetaErrorTarget>0 ? -rotationSpeed: rotationSpeed);// targetTheta - curTheta;
+					cout << "Rotate-ObstacleThreshold " << (thetaErrorObstacle > 0 ? "Positive:.1" : "Negative:-.1") << " | Error = " << thetaErrorObstacle << endl;
+  				}
+// MOFIDIED FOR EXPERIMENT END
+
+ 			// while (std::abs(thetaErrorObstacle) >= ObstacleThreshold)
+			// 	{
+ 			// 		io.sendBaseReference(0, 0, (thetaErrorObstacle > 0 ?  rotationSpeed : -rotationSpeed)); // abs(size_vec- 2*middleIdx)<middleIdxCheck?moveForwardSpeed:0
+			// 		curTheta  +=(thetaErrorObstacle < 0 ?  rotationSpeed : -rotationSpeed);
+			// 		thetaErrorObstacle +=(thetaErrorTarget>0 ? -rotationSpeed: rotationSpeed);// targetTheta - curTheta;
+			// 		cout << "Rotate-ObstacleThreshold " << (thetaErrorObstacle > 0 ? "Positive:.1" : "Negative:-.1") << " | Error = " << thetaErrorObstacle << endl;
+  			// 	}
+
+
+
+			cout<<"Difference after OB:"<<thetaErrorObstacle<<endl;
+			// }
+			
+			if(distanceToTarget<0.5){io.sendBaseReference(0, 0, 0);}
+ 		}		
 		else
 		{
-			cout << "Failed to read laser data." << endl;
+			//cout << "Failed to read laser data." << endl;
 		}
 
 		// Sleep to maintain the loop rate

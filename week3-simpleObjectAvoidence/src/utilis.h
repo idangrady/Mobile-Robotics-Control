@@ -202,6 +202,56 @@ public:
 		return maxDegree;
 	}	
 
+	int findMiddleIndexOfLongestConsecutiveZeros(const std::vector<float>& vec)
+	{
+		int maxCount = 0;      // Maximum count of consecutive zeros
+		int maxIndex = -1;     // Index of the middle element of the maximum consecutive zeros
+		int currentCount = 0;  // Current count of consecutive zeros
+		int currentIndex = -1; // Index of the current element
+
+		for (int i = 0; i < vec.size(); ++i)
+		{
+			if (vec[i] == 0)
+			{
+				// If the current element is zero
+				if (currentCount == 0)
+					currentIndex = i;  // Set the current index as the starting index
+
+				++currentCount;  // Increment the current count of consecutive zeros
+
+				if (currentCount > maxCount)
+				{
+					// If the current count exceeds the maximum count
+					maxCount = currentCount;                          // Update the maximum count
+					maxIndex = currentIndex + (currentCount / 2);     // Update the middle index
+				}
+			}
+			else
+			{
+				// If the current element is not zero
+				currentCount = 0;  // Reset the current count of consecutive zeros
+			}
+		}
+
+    return maxIndex;
+}
+
+template<typename T, typename U>
+bool canMoveForwardNarrowedBand(vector<T>& values, int range, U valueToExpect)
+{
+    int middle = values.size() / 2;
+    bool out = true;
+    for (int i = middle - range / 2; i < range / 2 + middle; i++)
+    {
+        if (static_cast<U>(values[i]) == valueToExpect)
+        {
+            out = false;
+            break;
+        }
+    }
+    return out;
+}
+
 private:
     ObstacleDetector() = default; // Private constructor to prevent instantiation
 };
@@ -343,41 +393,67 @@ public:
 	}
 
 
-void findCornersAndPlot(const std::vector<float>& values, double threshold = 0.005, const std::string& windowName = "Scatter Plot")
+tuple<int, int> findCornersAndPlot(const std::vector<float>& values, double threshold = 0.005, const std::string& windowName = "Scatter Plot")
 {
 
 	cv::Mat corners = findCorners(values,threshold);
-	cout<<corners.size()<<endl;
+	//cout<<corners.size()<<endl;
  
-
+	// vector<int> outCorner;
     double minVal = *std::min_element(values.begin(), values.end());
     double maxVal = *std::max_element(values.begin(), values.end());
 	double range = maxVal - minVal;
-
-	cv::Mat scatterPlot(values.size(), 600, CV_8UC3, cv::Scalar(255, 255, 255));
+	int8_t moveForward=1; 
+	int8_t amountToCheck = 20; 
+	int middleIdx = values.size()/2;
+	
+	int biggestMiddle = -1; 
+	int start =-1; 
+ 	cv::Mat scatterPlot(values.size(), 600, CV_8UC3, cv::Scalar(255, 255, 255));
     int x = 0;
-    bool drawLine = false;
-    for (const double& value : values) {
+	
+     for (const double& value : values) {
 	// 	cout<<"corners[x] "<<corners.at<float>(x, 0)<<endl;
         if (corners.at<float>(x, 0)==255 ||value==-1) {
-            // Draw a vertical line
-             drawLine = true;
-            cv::line(scatterPlot, cv::Point(x, 0), cv::Point(x, scatterPlot.rows - 1), cv::Scalar(20, 100, 20), 5);
-        } else {
+ 			cv::line(scatterPlot, cv::Point(x, 0), cv::Point(x, scatterPlot.rows - 1), cv::Scalar(20, 100, 20), 5);
+			if(abs(x-middleIdx)<amountToCheck)
+			{
+				// we have corner in the middle
+				moveForward =0;
+			};
+		}
+		else {
+			// corners.push_back(0);
             // Calculate the normalized position of the data point
             int y = static_cast<int>((scatterPlot.rows - 1) - ((value - minVal) / range * (scatterPlot.rows - 1))) + 100;
              // Set the color based on the range index
             cv::Scalar color(100, 0, 100);
-			if(value==0) color=cv::Scalar(0,0,0);
+
+			if(start>-1 && value!=0)
+			{
+				biggestMiddle = biggestMiddle <(start+ x)/2? (start+ x)/2 : biggestMiddle;
+				start =-1;
+			}
+			else if(value==0) 
+				{color=cv::Scalar(0,0,0);
+				if(start ==-1){start=x;}
+			};
             // Draw a circle at the data point position with the determined color
             cv::circle(scatterPlot, cv::Point(x, y), 3, color, cv::FILLED);
         }
         x++;
     }
- 
+	//int max = findMiddleIndexOfLongestConsecutiveZeros(values);
+	cv::line(scatterPlot, cv::Point(biggestMiddle, 0), cv::Point(biggestMiddle, scatterPlot.rows - 1), cv::Scalar(100, 100, 100), 5);
+
+ //	cout<<"biggestMiddle: "<<biggestMiddle<<endl;
+
     // Display the scatter plot with vertical lines
+	// cv::flip(scatterPlot, scatterPlot, 1);
+
     cv::imshow(windowName, scatterPlot);
     cv::waitKey(1);
+	return make_tuple(moveForward, biggestMiddle);
 }
 
 void plotScatter(const std::vector<float>& data, std::vector<int>& obsIdx, std::string windowName_)

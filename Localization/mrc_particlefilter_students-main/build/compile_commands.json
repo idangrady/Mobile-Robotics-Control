@@ -1,0 +1,117 @@
+[
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include -isystem /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include/3rdparty  -march=native -ffast-math -fno-math-errno -g   -std=gnu++14 -o CMakeFiles/tooltest.dir/tests/tooltest.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/tests/tooltest.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/tests/tooltest.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include -isystem /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include/3rdparty  -march=native -ffast-math -fno-math-errno -g   -std=gnu++14 -o CMakeFiles/main.dir/src/main.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/main.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/main.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include -isystem /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include/3rdparty  -march=native -ffast-math -fno-math-errno -g   -std=gnu++14 -o CMakeFiles/assignment1.dir/tests/ex1.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/tests/ex1.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/tests/ex1.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include -isystem /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include/3rdparty  -march=native -ffast-math -fno-math-errno -g   -std=gnu++14 -o CMakeFiles/demo2.dir/demos/main_ex2.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/demos/main_ex2.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/demos/main_ex2.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -DparticleFilterMRC_EXPORTS -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include  -march=native -ffast-math -fno-math-errno -g -fPIC   -std=gnu++14 -o CMakeFiles/particleFilterMRC.dir/src/tools.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/tools.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/tools.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -DparticleFilterMRC_EXPORTS -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include  -march=native -ffast-math -fno-math-errno -g -fPIC   -std=gnu++14 -o CMakeFiles/particleFilterMRC.dir/src/Objects/World.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/Objects/World.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/Objects/World.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -DparticleFilterMRC_EXPORTS -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include  -march=native -ffast-math -fno-math-errno -g -fPIC   -std=gnu++14 -o CMakeFiles/particleFilterMRC.dir/src/Objects/Robot.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/Objects/Robot.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/Objects/Robot.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -DparticleFilterMRC_EXPORTS -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include  -march=native -ffast-math -fno-math-errno -g -fPIC   -std=gnu++14 -o CMakeFiles/particleFilterMRC.dir/src/FilterComponents/Particle.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/FilterComponents/Particle.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/FilterComponents/Particle.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -DparticleFilterMRC_EXPORTS -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include  -march=native -ffast-math -fno-math-errno -g -fPIC   -std=gnu++14 -o CMakeFiles/particleFilterMRC.dir/src/Filters/ParticleFilter.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/Filters/ParticleFilter.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/Filters/ParticleFilter.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -DparticleFilterMRC_EXPORTS -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include  -march=native -ffast-math -fno-math-errno -g -fPIC   -std=gnu++14 -o CMakeFiles/particleFilterMRC.dir/src/Filters/ParticleFilterBase.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/Filters/ParticleFilterBase.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/Filters/ParticleFilterBase.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -DparticleFilterMRC_EXPORTS -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include  -march=native -ffast-math -fno-math-errno -g -fPIC   -std=gnu++14 -o CMakeFiles/particleFilterMRC.dir/src/FilterComponents/Resampler.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/FilterComponents/Resampler.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/src/FilterComponents/Resampler.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -DparticleFilterMRC_EXPORTS -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include  -march=native -ffast-math -fno-math-errno -g -fPIC   -std=gnu++14 -o CMakeFiles/particleFilterMRC.dir/include/3rdparty/rangelibc/vendor/lodepng/lodepng.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include/3rdparty/rangelibc/vendor/lodepng/lodepng.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include/3rdparty/rangelibc/vendor/lodepng/lodepng.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include -isystem /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include/3rdparty  -march=native -ffast-math -fno-math-errno -g   -std=gnu++14 -o CMakeFiles/demo1.dir/demos/main_ex1.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/demos/main_ex1.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/demos/main_ex1.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include -isystem /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include/3rdparty  -march=native -ffast-math -fno-math-errno -g   -std=gnu++14 -o CMakeFiles/demo3.dir/demos/main_ex3.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/demos/main_ex3.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/demos/main_ex3.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include -isystem /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include/3rdparty  -march=native -ffast-math -fno-math-errno -g   -std=gnu++14 -o CMakeFiles/assignment2.dir/tests/ex2.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/tests/ex2.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/tests/ex2.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include -isystem /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include/3rdparty  -march=native -ffast-math -fno-math-errno -g   -std=gnu++14 -o CMakeFiles/assignment3.dir/tests/ex3.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/tests/ex3.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/tests/ex3.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include -isystem /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include/3rdparty  -march=native -ffast-math -fno-math-errno -g   -std=gnu++14 -o CMakeFiles/assignment3.dir/tests/ex3b.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/tests/ex3b.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/tests/ex3b.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include -isystem /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include/3rdparty  -march=native -ffast-math -fno-math-errno -g   -std=gnu++14 -o CMakeFiles/assignment4.dir/tests/ex4.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/tests/ex4.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/tests/ex4.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build",
+  "command": "/usr/bin/c++  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"mrc-particlefilter\\\" -DUSE_CUDA=0 -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include -isystem /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/include/3rdparty  -march=native -ffast-math -fno-math-errno -g   -std=gnu++14 -o CMakeFiles/assignment4.dir/tests/ex4b.cpp.o -c /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/tests/ex4b.cpp",
+  "file": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/tests/ex4b.cpp"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build/gtest/googlemock",
+  "command": "/usr/bin/c++  -DGTEST_CREATE_SHARED_LIBRARY=1 -DUSE_CUDA=0 -Dgmock_main_EXPORTS -isystem /usr/src/googletest/googlemock/include -isystem /usr/src/googletest/googlemock -isystem /usr/src/googletest/googletest/include -isystem /usr/src/googletest/googletest  -march=native -ffast-math -fno-math-errno -g -fPIC   -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -DGTEST_HAS_PTHREAD=1 -std=c++11 -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.o -c /usr/src/googletest/googlemock/src/gmock_main.cc",
+  "file": "/usr/src/googletest/googlemock/src/gmock_main.cc"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build/gtest/googlemock",
+  "command": "/usr/bin/c++  -DGTEST_CREATE_SHARED_LIBRARY=1 -DUSE_CUDA=0 -Dgmock_EXPORTS -I/usr/src/googletest/googlemock/include -I/usr/src/googletest/googlemock -isystem /usr/src/googletest/googletest/include -isystem /usr/src/googletest/googletest  -march=native -ffast-math -fno-math-errno -g -fPIC   -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -DGTEST_HAS_PTHREAD=1 -std=c++11 -o CMakeFiles/gmock.dir/src/gmock-all.cc.o -c /usr/src/googletest/googlemock/src/gmock-all.cc",
+  "file": "/usr/src/googletest/googlemock/src/gmock-all.cc"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build/gtest/googletest",
+  "command": "/usr/bin/c++  -DGTEST_CREATE_SHARED_LIBRARY=1 -DUSE_CUDA=0 -Dgtest_main_EXPORTS -isystem /usr/src/googletest/googletest/include -isystem /usr/src/googletest/googletest  -march=native -ffast-math -fno-math-errno -g -fPIC   -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -DGTEST_HAS_PTHREAD=1 -std=c++11 -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.o -c /usr/src/googletest/googletest/src/gtest_main.cc",
+  "file": "/usr/src/googletest/googletest/src/gtest_main.cc"
+},
+{
+  "directory": "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build/gtest/googletest",
+  "command": "/usr/bin/c++  -DGTEST_CREATE_SHARED_LIBRARY=1 -DUSE_CUDA=0 -Dgtest_EXPORTS -I/usr/src/googletest/googletest/include -I/usr/src/googletest/googletest  -march=native -ffast-math -fno-math-errno -g -fPIC   -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++11 -o CMakeFiles/gtest.dir/src/gtest-all.cc.o -c /usr/src/googletest/googletest/src/gtest-all.cc",
+  "file": "/usr/src/googletest/googletest/src/gtest-all.cc"
+}
+]

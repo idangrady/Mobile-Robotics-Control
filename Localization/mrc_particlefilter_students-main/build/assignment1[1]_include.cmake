@@ -1,0 +1,5 @@
+if(EXISTS "/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build/assignment1[1]_tests.cmake")
+  include("/home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build/assignment1[1]_tests.cmake")
+else()
+  add_test(assignment1_NOT_BUILT assignment1_NOT_BUILT)
+endif()

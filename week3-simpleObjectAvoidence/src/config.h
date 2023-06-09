@@ -22,10 +22,10 @@ using namespace std;
 
 // Values
 int option = 1;
-bool debug = true;
-bool printAngles = true;
+bool debug = false;
+bool printAngles = false;
 bool debugObstacleDetector = false;
-bool printDetectedObstacles = true;
+bool printDetectedObstacles = false;
 
 
 int minObstLength = 15 ;

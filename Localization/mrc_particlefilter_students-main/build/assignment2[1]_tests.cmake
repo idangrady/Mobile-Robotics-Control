@@ -1,0 +1,5 @@
+add_test( Assignment2.accurateAverage /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/bin/assignment2 [==[--gtest_filter=Assignment2.accurateAverage]==] --gtest_also_run_disabled_tests)
+set_tests_properties( Assignment2.accurateAverage PROPERTIES WORKING_DIRECTORY /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build)
+add_test( Assignment2.nonUniformWeights /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/bin/assignment2 [==[--gtest_filter=Assignment2.nonUniformWeights]==] --gtest_also_run_disabled_tests)
+set_tests_properties( Assignment2.nonUniformWeights PROPERTIES WORKING_DIRECTORY /home/idangrady/Documents/Github/Mobile-Robotics-Control/Localization/mrc_particlefilter_students-main/build)
+set( assignment2_TESTS Assignment2.accurateAverage Assignment2.nonUniformWeights)

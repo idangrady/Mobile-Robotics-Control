@@ -1,0 +1,13 @@
+{
+    "World": {
+      "OccupancyGridMap": {
+        "filename": "../maps/testmap.png",
+        "resolution": 0.025
+      }
+    },
+    "Robot": {
+      "maxRange": 10
+      
+    }
+  }
+  

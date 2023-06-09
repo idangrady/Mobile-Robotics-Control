@@ -1,0 +1,40 @@
+{
+  "World": {
+    "OccupancyGridMap": {
+      "filename": "../maps/heightmap.png",
+      "resolution": 0.025
+    }
+  },
+  "Robot": {
+    "maxRange": 10,
+    "InitialGuess": [
+      13.5,
+      7.5,
+      1.570796
+    ]
+  },
+  "ParticleFilter": {
+    "Flavor": "Conventional",
+    "Particles": 2500,
+    "PropagationParameters": {
+      "motion_forward_std": 0.1,
+      "motion_turn_std": 0.1,
+      "meas_dist_std": 0.05
+    },
+    "MeasurementModel": {
+      "hit_prob": 0.80,
+      "hit_sigma": 0.20,
+      "rand_prob": 0.05,
+      "rand_range": 10.0,
+      "short_prob": 0.10,
+      "short_lambda": 0.10,
+      "max_prob": 0.05,
+      "max_range": 0.25
+    },
+    "Resampling": {
+      "Scheme": "Always",
+      "Threshold": 0.005,
+      "Algorithm": "Multinomial"
+    }
+  }
+}
