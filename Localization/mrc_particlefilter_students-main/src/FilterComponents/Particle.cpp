@@ -2,6 +2,9 @@
 
 #include "tools.h"
 
+
+
+
 void Particle::initialise(const World &world,
                           const double &weight,
                           const Pose &randompose)
@@ -74,49 +77,45 @@ void Particle::propagateSample(const Pose &dPose,
 
    if (print) {std::cout<<"x: "<<x<<", y "<<y<<std::endl;}
     // sampled based on the angular and linear velocity
-    std::normal_distribution<double> xyDistribution(0, proc_noise[0]);
-    std::normal_distribution<double> thetaDistribution(0, proc_noise[1]);
+ 
+    // // Incorporate the odom information to change the location of the particles
+    // // 1.) Sample a displacement in each direction
+    // // given the odometry information and magnitude of the noise
+    // // Generate random numbers using the normal distributions
+    double xSampledNoise = _get_noise_sample_gaussian(dPose[0], proc_noise[0]);
+    double ySampledNoise= _get_noise_sample_gaussian(dPose[1], proc_noise[0]);
+    double thteaSampledNoise= _get_noise_sample_gaussian(dPose[2], proc_noise[1]);
 
-    // Incorporate the odom information to change the location of the particles
-    // 1.) Sample a displacement in each direction
-    // given the odometry information and magnitude of the noise
-    // Generate random numbers using the normal distributions
-    double xSampledNoise = xyDistribution(*_generatorPtr); //noise to robot in robot frame
-    double ySampledNoise = xyDistribution(*_generatorPtr); //noise to robot in robot frame
-     if (print) {std::cout<<"xSampledNoise: "<<xSampledNoise<<", ySampledNoise "<<ySampledNoise<<std::endl;}
     // angular
-    double thteaSampledNoise = thetaDistribution(*_generatorPtr); //noise to robot in robot frame
+    // bool print_theta =false;
+    theta+= thteaSampledNoise;
+   // theta = wrapToPi(theta);
+    // if(>M_PI) 
+    // {std::cout<<"before: " << theta + thteaSampledNoise<<std::endl;print_theta =true;}
+    // theta = fmod(theta + thteaSampledNoise + M_PI, 2 * M_PI) - M_PI; // wrap theta to -π to π range after adding noise
+    // if(print_theta) std::cout<<"After: " << theta<<std::endl;
 
+    // theta = fmod(theta + M_PI, 2 * M_PI) - M_PI; 
+    double thetaRobotFrame=  theta  +offset_angle; // robot frame
     // // 2.) Update the value of theta given the sampled theta displacement
-    // double xDisplacement_robot = (dPose[0] * std::cos(-offset_angle) - dPose[1] * std::sin(-offset_angle)) ; // dpos+noise in robot frame
-    // double yDisplacement_robot = (dPose[0] * std::sin(-offset_angle) + dPose[1] * std::cos(-offset_angle)) ; // dpos+noise in robot frame
-
-    // // // 2.) Update the value of theta given the sampled theta displacement
-    // double thetaDisplacement = dPose[2] + thteaSampledNoise; //dpos in robot frame
 
     //inverse rotation
-    double xDisplacement_mapframe = (xSampledNoise * std::cos(theta) + ySampledNoise * std::sin(theta)) ; // displacement to map frame
-    double yDisplacement_mapframe = (-xSampledNoise * std::sin(theta) - ySampledNoise * std::cos(theta)) ;// displacement to map frame
-    // if(print){
-    //     std::cout<<"Start: " <<x<<"," <<y<<std::endl;
-    //     std::cout<<"End" <<(x+ xDisplacement_mapframe)<<"," <<(y+ yDisplacement_mapframe)<<std::endl;
-    // }
-
-
-
-
+    
+    // double xDisplacement_mapframe = (xSampledNoise * std::cos(thetaRobotFrame) + ySampledNoise * std::sin(-thetaRobotFrame));
+    // double yDisplacement_mapframe = (-xSampledNoise * std::sin(thetaRobotFrame) + ySampledNoise * std::cos(-thetaRobotFrame));
+    
+    std::vector<double> dmap{xSampledNoise, ySampledNoise, 0};
+    std::vector<double> outRotate = inverse_rotatePose(dmap, thetaRobotFrame);
     // 3.) The new x and y location are obtained by using the displacement and new theta angle
     // Assuming that the robot first turns then drives
     // Make sure to transform the odometry information from odom frame into robot frame first
     // and afterwards into map frame
 
-    Pose displacement_mapframe = {xDisplacement_mapframe, yDisplacement_mapframe, thetaDisplacement};
-
-    double x_new = x+ displacement_mapframe[0];
-    double y_new = y- displacement_mapframe[1]; // DO NOT CHANGE: Difference in map coordinate convetion
-    // Write result to _particlePose
+    x+= outRotate[0];
+    y-= outRotate[1]; // DO NOT CHANGE: Difference in map coordinate convetion
+     // Write result to _particlePose
  //   double new_theta = theta + thetaDisplacement;
-    _particlePose = {x_new, y_new, theta+thteaSampledNoise };
+    _particlePose = {x, y, theta};
 }
 
 Likelihood Particle::computeLikelihood(const measurementList &data,
