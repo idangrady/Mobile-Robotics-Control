@@ -101,7 +101,7 @@ void Particle::propagateSample(const Pose &dPose,
             std::vector<double> dmap{xSampledNoise, ySampledNoise, 0};
             std::vector<double> InverseRotation = inverse_rotatePose(dmap, thetaRobotFrame);
             xNew = InverseRotation[0];
-            yNew =  InverseRotation[0];
+            yNew =  InverseRotation[1];
             thetaNew = theta;
         }
  
@@ -134,7 +134,7 @@ void Particle::propagateSample(const Pose &dPose,
     // Make sure to transform the odometry information from odom frame into robot frame first
     // and afterwards into map frame
 
-    _particlePose = {xNew, yNew, thetaNew};
+    _particlePose = {x+xNew, y-yNew, thetaNew};
 }
 
 Likelihood Particle::computeLikelihood(const measurementList &data,
