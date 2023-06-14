@@ -148,10 +148,20 @@ Likelihood Particle::computeLikelihood(const measurementList &data,
     measurementList prediction = world.predictMeasurement(particlePose);
     // We skip every subsamp beams
     int subsamp = world._subsample;
-
     // 2) Compute the likelihood of the current measurement given the prediction
     Likelihood likelihood = _weight;
 
+    for (size_t i = 0; i < data.size(); ++i)
+    {
+        // Skip measurements based on subsampling factor
+        if (i % subsamp != 0)
+            continue;
+
+        double curLikelihood = measurementmodel(prediction[i], data[i], lm);
+        likelihood *= curLikelihood;
+ 
+    }
+ 
     // 4) Return the result
     return likelihood;
 }
@@ -160,7 +170,10 @@ double Particle::measurementmodel(const measurement &prediction,
                                   const measurement &data,
                                   const MeasModelParams &lm) const
 {
-    return 1;
+    double error = prediction - data;
+    double sigma = lm.hit_sigma;
+    double likelihood = (1 / (sqrt(2 * M_PI) * sigma)) * exp(-0.5 * pow(error / sigma, 2));
+    return likelihood;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
