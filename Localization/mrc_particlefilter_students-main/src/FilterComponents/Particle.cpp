@@ -1,8 +1,10 @@
 #include "./FilterComponents/Particle.h"
 
+#include <numeric>
 #include "tools.h"
 
 
+#include <boost/math/distributions/normal.hpp>
 
 
 void Particle::initialise(const World &world,
@@ -142,14 +144,27 @@ Likelihood Particle::computeLikelihood(const measurementList &data,
                                        const MeasModelParams &lm)
 {
 
+      
+    //start here
     Pose particlePose = getPosition();
 
     // 1) Generate a prediction
     measurementList prediction = world.predictMeasurement(particlePose);
     // We skip every subsamp beams
-    int subsamp = world._subsample;
+     int subsamp = world._subsample;
+
+    int i = 0;
+    int sumProbabilities = std::accumulate(data.begin(), data.end(), 0, [&i, subsamp](float a, float b) {
+        if (i % subsamp == 0)
+            return a + b;
+        else
+            return a;
+    });
+    std::cout<<"sumProbabilities "<< sumProbabilities << std::endl; 
+
+
     // 2) Compute the likelihood of the current measurement given the prediction
-    Likelihood likelihood = _weight;
+    Likelihood likelihood = 1; // can also be modeles when start with _weight
 
     for (size_t i = 0; i < data.size(); ++i)
     {
@@ -158,7 +173,8 @@ Likelihood Particle::computeLikelihood(const measurementList &data,
             continue;
 
         double curLikelihood = measurementmodel(prediction[i], data[i], lm);
-        likelihood *= curLikelihood;
+        //std::cout<<"Cur i "<< i << "- "<< curLikelihood << std::endl; 
+        likelihood *= curLikelihood; // try to normlize
  
     }
  
@@ -170,10 +186,34 @@ double Particle::measurementmodel(const measurement &prediction,
                                   const measurement &data,
                                   const MeasModelParams &lm) const
 {
-    double error = prediction - data;
-    double sigma = lm.hit_sigma;
-    double likelihood = (1 / (sqrt(2 * M_PI) * sigma)) * exp(-0.5 * pow(error / sigma, 2));
+
+  
+    //  z_k^t represents an element of the data 
+    //  z_k^t* represents an element of the prediction
+
+     double likelihood = 0.0;
+
+    // Gaussian component
+    double gaussian_likelihood =  lm.hit_prob * exp(-0.5 * pow((data - prediction) / lm.hit_sigma, 2)) / (lm.hit_sigma * sqrt(2 * M_PI));
+    likelihood += gaussian_likelihood;   
+
+    // Uniform component
+    double uniform_likelihood = lm.rand_prob / lm.rand_range;
+    likelihood += uniform_likelihood;
+
+    // Exponential component
+    double exponential_likelihood =  lm.short_prob * lm.short_lambda * exp(-lm.short_lambda * data);
+    likelihood += exponential_likelihood;
+
+    // Discrete Uniform component
+    double discrete_uniform_likelihood =  lm.max_prob / lm.max_range;
+    likelihood += discrete_uniform_likelihood;
+
+    std::cout<<"likelihood "<< likelihood << std::endl; 
+
     return likelihood;
+
+ 
 }
 
 //////////////////////////////////////////////////////////////////////////////////
