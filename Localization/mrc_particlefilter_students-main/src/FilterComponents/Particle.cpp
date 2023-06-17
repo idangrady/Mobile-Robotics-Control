@@ -162,9 +162,10 @@ Likelihood Particle::computeLikelihood(const measurementList &data,
     });
     std::cout<<"sumProbabilities "<< sumProbabilities << std::endl; 
 
-
+    std::vector<double> liklihoodPrediction;
     // 2) Compute the likelihood of the current measurement given the prediction
     Likelihood likelihood = 1; // can also be modeles when start with _weight
+    double sumLiklihoods =0;
 
     for (size_t i = 0; i < data.size(); ++i)
     {
@@ -173,11 +174,17 @@ Likelihood Particle::computeLikelihood(const measurementList &data,
             continue;
 
         double curLikelihood = measurementmodel(prediction[i], data[i], lm);
-        //std::cout<<"Cur i "<< i << "- "<< curLikelihood << std::endl; 
-        likelihood *= curLikelihood; // try to normlize
+        sumLiklihoods+=curLikelihood;
+        liklihoodPrediction.push_back(curLikelihood);
  
     }
- 
+
+    for(size_t i = 0; i < liklihoodPrediction.size(); ++i)
+    {
+    likelihood *=(liklihoodPrediction[i]/sumLiklihoods); // try to normlize
+    }
+        //std::cout<<"Cur i "<< i << "- "<< curLikelihood << std::endl; 
+
     // 4) Return the result
     return likelihood;
 }
@@ -194,22 +201,24 @@ double Particle::measurementmodel(const measurement &prediction,
      double likelihood = 0.0;
 
     // Gaussian component
-    double gaussian_likelihood =  lm.hit_prob * exp(-0.5 * pow((data - prediction) / lm.hit_sigma, 2)) / (lm.hit_sigma * sqrt(2 * M_PI));
-    likelihood += gaussian_likelihood;   
 
-    // Uniform component
-    double uniform_likelihood = lm.rand_prob / lm.rand_range;
-    likelihood += uniform_likelihood;
+    double gaussian_likelihood = (data< lm.max_range)? exp(-0.5 * pow((data - prediction) / lm.hit_sigma, 2)) / (lm.hit_sigma * sqrt(2 * M_PI)) :0; // if data< max range-> val else 0
+    likelihood += lm.hit_prob * gaussian_likelihood;   
 
-    // Exponential component
-    double exponential_likelihood =  lm.short_prob * lm.short_lambda * exp(-lm.short_lambda * data);
-    likelihood += exponential_likelihood;
+    // Exponential component -> unexpected obstacle
+    double deltaExponent = 1/(1-std::exp(-lm.short_lambda*prediction));
+    double exponential_likelihood =  (data<prediction) ?  deltaExponent* lm.short_lambda * exp(-lm.short_lambda * data): 0;  // if data <prediction, otherwise 0
+    likelihood += lm.short_prob * exponential_likelihood;
+ 
+    // Uniform component -> Random measurements
+    double uniform_likelihood = (data<lm.rand_range) ?  1 / lm.rand_range :0 ; // if data between 0 and z_Max, otherwise 0
+    likelihood += lm.rand_prob* uniform_likelihood;
 
-    // Discrete Uniform component
-    double discrete_uniform_likelihood =  lm.max_prob / lm.max_range;
-    likelihood += discrete_uniform_likelihood;
-
-    std::cout<<"likelihood "<< likelihood << std::endl; 
+    // PMax-> Failures
+    double faliaturesLikelihood= (data==lm.max_range) ? 1: 0; // if data ==maxrange ->1 else 0
+    likelihood += lm.max_prob* faliaturesLikelihood;
+ 
+   // std::cout<<"likelihood "<< likelihood << std::endl; 
 
     return likelihood;
 
